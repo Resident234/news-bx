@@ -95,7 +95,7 @@ class bx_news extends CModule
                 array (
                     0 =>
                         array (
-                            'VALUE' => 'Да',
+                            'VALUE' => Loc::getMessage('ENUM_YES'),
                             'DEF' => 'N',
                             'SORT' => '10',
                             'XML_ID' => 'Y',
