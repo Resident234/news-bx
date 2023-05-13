@@ -34,6 +34,7 @@ class NewsProcessingTable extends DataManager
         return [
             'ID'          => new IntegerField('ID', ['primary' => true, 'autocomplete' => true]),
             'NEWS_ID'     => new IntegerField('NEWS_ID', ['required' => true]),
+            'REQUEST_ID'  => new IntegerField('REQUEST_ID', ['required' => true]),
         ];
     }
 }

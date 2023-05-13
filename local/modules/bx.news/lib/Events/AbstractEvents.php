@@ -13,7 +13,7 @@ abstract class AbstractEvents
     /**
      * @var string
      */
-    protected const BASE_MODULE_ID = 'main';
+    protected const BASE_MODULE_ID = 'bx.news';
 
     public static function bind(): void
     {
