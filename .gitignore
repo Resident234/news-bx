@@ -1,0 +1,61 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Bitrix template
+# gitignore template for 1C-Bitrix, a PHP-based CMS
+# website: https://www.1c-bitrix.ru
+
+#Exclude all of core files
+/bitrix/*
+
+# Исключаем настройки PHPStorm, мы в нём работаем
+/.idea/
+
+# исключаем логи
+/local/php_interface/logs/
+/local/logs/
+
+# исключаем загружаемые файлы
+/upload/
+
+# различные системные папки и файлы хостингов и операционных систем
+/test/*
+/urlrewrite.php
+/favicon.ico
+/.vscode/
+
+# исключаем все текстовые и подобные ресурсы (на нашей практике они всегда излишни)
+*.xml
+*.html
+*.txt
+*.log
+*.css.map
+/.*
+/restore.php
+/404.php
+/500.html
+
+# архивы, включая многотомные
+*.zip
+*.zip*
+*.tar
+*.tar*
+*.enc
+*.enc*
+*.gz
+*.gz*
+*.tgz
+*.tgz*
+*.sql
+*.rar
+.hg
+.ftpconfig
+*.doc
+*.docx
+*.rtf
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.psd
+*.psb
+*.sketch
+core.*
