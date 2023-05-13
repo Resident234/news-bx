@@ -52,30 +52,6 @@ class Helper
         return $this->lastError;
     }
 
-    public function getMode($key = false)
-    {
-        if ($key) {
-            return isset($this->mode[$key]) ? $this->mode[$key] : 0;
-        } else {
-            return $this->mode;
-        }
-    }
-
-    public function setMode($key, $val = 1)
-    {
-        if ($key instanceof Helper) {
-            $this->mode = $key->getMode();
-        } else {
-            $val = ($val) ? 1 : 0;
-            $this->mode[$key] = $val;
-        }
-    }
-
-    public function setTestMode($val = 1)
-    {
-        $this->setMode('test', $val);
-    }
-
     public function isEnabled()
     {
         return true;

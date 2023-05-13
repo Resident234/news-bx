@@ -2,22 +2,10 @@
 
 namespace BX\News;
 
-use Sprint\Migration\Exceptions\HelperException;
-use Sprint\Migration\Helpers\AdminIblockHelper;
-use Sprint\Migration\Helpers\AgentHelper;
-use Sprint\Migration\helpers\DeliveryServiceHelper;
-use Sprint\Migration\Helpers\EventHelper;
-use Sprint\Migration\Helpers\FormHelper;
-use Sprint\Migration\Helpers\HlblockHelper;
-use Sprint\Migration\Helpers\IblockHelper;
-use Sprint\Migration\Helpers\LangHelper;
-use Sprint\Migration\Helpers\MedialibHelper;
-use Sprint\Migration\Helpers\OptionHelper;
-use Sprint\Migration\Helpers\SiteHelper;
-use Sprint\Migration\Helpers\SqlHelper;
-use Sprint\Migration\Helpers\UserGroupHelper;
-use Sprint\Migration\Helpers\UserOptionsHelper;
-use Sprint\Migration\Helpers\UserTypeEntityHelper;
+use BX\News\Helpers\AgentHelper;
+use BX\News\Helpers\IblockHelper;
+use Exception;
+
 
 /**
  * @method IblockHelper             Iblock()
@@ -54,14 +42,9 @@ class HelperManager
         return $this->callHelper($name);
     }
 
-    public function registerHelper($name, $class)
-    {
-        $this->registered[$name] = $class;
-    }
-
     /**
      * @param $name
-     * @throws HelperException
+     * @throws Exception
      * @return Helper
      */
     protected function callHelper($name)

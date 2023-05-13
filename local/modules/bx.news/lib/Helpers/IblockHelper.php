@@ -3,6 +3,9 @@
 namespace BX\News\Helpers;
 
 use BX\News\Helper;
+use CIBlock;
+use CIBlockProperty;
+use CIBlockPropertyEnum;
 use Exception;
 
 class IblockHelper extends Helper
@@ -24,17 +27,14 @@ class IblockHelper extends Helper
         $fields = $this->prepareExportProperty($fields);
 
         if (empty($exists)) {
-            $ok = $this->getMode('test') ? true : $this->addProperty($iblockId, $fields);
-            return $ok;
+            return $this->addProperty($iblockId, $fields);
         }
 
         if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->getMode('test') ? true : $this->updatePropertyById($exists['ID'], $fields);
-            return $ok;
+            return $this->updatePropertyById($exists['ID'], $fields);
         }
 
-        $ok = $this->getMode('test') ? true : $exists['ID'];
-        return $ok;
+        return $exists['ID'];
     }
 
     /**
@@ -138,7 +138,7 @@ class IblockHelper extends Helper
      * Добавляет свойство инфоблока если его не существует
      * @param $iblockId
      * @param $fields , обязательные параметры - код свойства
-     * @throws HelperException
+     * @throws Exception
      * @return bool
      */
     public function addPropertyIfNotExists($iblockId, $fields)
@@ -158,7 +158,7 @@ class IblockHelper extends Helper
      * Добавляет свойство инфоблока
      * @param $iblockId
      * @param $fields
-     * @throws HelperException
+     * @throws Exception
      * @return int|void
      */
     public function addProperty($iblockId, $fields)
@@ -216,7 +216,7 @@ class IblockHelper extends Helper
      * Удаляет свойство инфоблока если оно существует
      * @param $iblockId
      * @param $code
-     * @throws HelperException
+     * @throws Exception
      * @return bool|void
      */
     public function deletePropertyIfExists($iblockId, $code)
@@ -233,7 +233,7 @@ class IblockHelper extends Helper
     /**
      * Удаляет свойство инфоблока
      * @param $propertyId
-     * @throws HelperException
+     * @throws Exception
      * @return bool|void
      */
     public function deletePropertyById($propertyId)
@@ -251,7 +251,7 @@ class IblockHelper extends Helper
      * @param $iblockId
      * @param $code
      * @param $fields
-     * @throws HelperException
+     * @throws Exception
      * @return bool|int|void
      */
     public function updatePropertyIfExists($iblockId, $code, $fields)
@@ -267,7 +267,7 @@ class IblockHelper extends Helper
      * Обновляет свойство инфоблока
      * @param $propertyId
      * @param $fields
-     * @throws HelperException
+     * @throws Exception
      * @return int|void
      */
     public function updatePropertyById($propertyId, $fields)
@@ -329,7 +329,7 @@ class IblockHelper extends Helper
      * Данные подготовлены для экспорта в миграцию или схему
      * @param $iblockId
      * @param bool $code
-     * @throws HelperException
+     * @throws Exception
      * @return array|void
      */
     public function exportProperty($iblockId, $code = false)
@@ -373,7 +373,7 @@ class IblockHelper extends Helper
     /**
      * @param $iblockId
      * @param $code
-     * @throws HelperException
+     * @throws Exception
      * @return bool
      * @deprecated
      */
@@ -386,7 +386,7 @@ class IblockHelper extends Helper
      * @param $iblockId
      * @param $code
      * @param $fields
-     * @throws HelperException
+     * @throws Exception
      * @return bool|mixed
      * @deprecated
      */
@@ -708,17 +708,14 @@ class IblockHelper extends Helper
         $fields = $this->prepareExportIblock($fields);
 
         if (empty($item)) {
-            $ok = $this->getMode('test') ? true : $this->addIblock($fields);
-            return $ok;
+            return $this->addIblock($fields);
         }
 
         if ($this->hasDiff($exists, $fields)) {
-            $ok = $this->getMode('test') ? true : $this->updateIblock($item['ID'], $fields);
-            return $ok;
+            return $this->updateIblock($item['ID'], $fields);
         }
 
-        $ok = $this->getMode('test') ? true : $item['ID'];
-        return $ok;
+        return $item['ID'];
     }
 
     /**
@@ -737,13 +734,11 @@ class IblockHelper extends Helper
         $fields = array_replace_recursive($exportExists, $fields);
 
         if (empty($exists)) {
-            $ok = $this->getMode('test') ? true : $this->updateIblockFields($iblockId, $fields);
-            return $ok;
+            return $this->updateIblockFields($iblockId, $fields);
         }
 
         if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->getMode('test') ? true : $this->updateIblockFields($iblockId, $fields);
-            return $ok;
+            return $this->updateIblockFields($iblockId, $fields);
         }
 
         return true;
@@ -753,7 +748,7 @@ class IblockHelper extends Helper
      * Получает инфоблок
      * Данные подготовлены для экспорта в миграцию или схему
      * @param $iblockId
-     * @throws HelperException
+     * @throws Exception
      * @return array|void
      */
     public function exportIblock($iblockId)

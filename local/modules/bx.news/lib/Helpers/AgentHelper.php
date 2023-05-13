@@ -4,6 +4,7 @@ namespace BX\News\Helpers;
 
 use BX\News\Helper;
 use CAgent;
+use Exception;
 
 
 class AgentHelper extends Helper
@@ -23,42 +24,7 @@ class AgentHelper extends Helper
         }
         return $res;
     }
-
-    /**
-     * Получает список агентов по фильтру
-     * Данные подготовлены для экспорта в миграцию или схему
-     * @param array $filter
-     * @return array
-     */
-    public function exportAgents($filter = [])
-    {
-        $agents = $this->getList($filter);
-
-        $exportAgents = [];
-        foreach ($agents as $agent) {
-            $exportAgents[] = $this->prepareExportAgent($agent);
-        }
-
-        return $exportAgents;
-    }
-
-    /**
-     * Получает агента
-     * Данные подготовлены для экспорта в миграцию или схему
-     * @param $moduleId
-     * @param string $name
-     * @return bool
-     */
-    public function exportAgent($moduleId, $name = '')
-    {
-        $agent = $this->getAgent($moduleId, $name);
-        if (empty($agent)) {
-            return false;
-        }
-
-        return $this->prepareExportAgent($agent);
-    }
-
+    
     /**
      * Получает агента
      * @param $moduleId
@@ -112,7 +78,7 @@ class AgentHelper extends Helper
      * Сохраняет агента
      * Создаст если не было, обновит если существует и отличается
      * @param array $fields , обязательные параметры - id модуля, функция агента
-     * @throws HelperException
+     * @throws Exception
      * @return bool|mixed
      */
     public function saveAgent($fields = [])
@@ -128,8 +94,7 @@ class AgentHelper extends Helper
         $fields = $this->prepareExportAgent($fields);
 
         if (empty($exists)) {
-            $ok = $this->getMode('test') ? true : $this->addAgent($fields);
-            return $ok;
+            return $this->addAgent($fields);
         }
 
         if (strtotime($fields['NEXT_EXEC']) <= strtotime($exportExists['NEXT_EXEC'])) {
@@ -138,13 +103,10 @@ class AgentHelper extends Helper
         }
 
         if ($this->hasDiff($exportExists, $fields)) {
-            $ok = $this->getMode('test') ? true : $this->updateAgent($fields);
-            return $ok;
+            return $this->updateAgent($fields);
         }
-
-
-        $ok = $this->getMode('test') ? true : $exists['ID'];
-        return $ok;
+        
+        return $exists['ID'];
     }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
 use BX\News\Agents\NewsCheckProcessingStatus;
 use BX\News\Events\NewsEvents;
@@ -44,7 +45,7 @@ class bx_news extends CModule
         $this->MODULE_ID = 'bx.news';
         $this->MODULE_VERSION = '0.0.1';
         $this->MODULE_VERSION_DATE = '2023-05-13 17:25:00';
-        $this->MODULE_NAME = 'Новости';
+        $this->MODULE_NAME = Loc::getMessage('MODULE_NAME');
         $this->MODULE_DESCRIPTION = '';
         $this->MODULE_GROUP_RIGHTS = 'N';
         $this->PARTNER_NAME = 'BX.News';
@@ -54,6 +55,8 @@ class bx_news extends CModule
     public function doInstall()
     {
         $this->includeEvents();
+        $this->includeHelpers();
+        $this->includeAgents();
         NewsEvents::bind();
         HelperManager::getInstance()->Agent()->saveAgent([
             'MODULE_ID'      => $this->MODULE_ID,
@@ -66,7 +69,7 @@ class bx_news extends CModule
 
         $iblockId = HelperManager::getInstance()->Iblock()->getIblockIdIfExists('news', 'news');
         HelperManager::getInstance()->Iblock()->saveProperty($iblockId, array (
-            'NAME' => 'Обработана',
+            'NAME' => Loc::getMessage('PROPERTY_PROCESSED_NAME'),
             'ACTIVE' => 'Y',
             'SORT' => '10',
             'CODE' => 'PROCESSED',
@@ -81,8 +84,8 @@ class bx_news extends CModule
             'MULTIPLE_CNT' => '5',
             'LINK_IBLOCK_ID' => '0',
             'WITH_DESCRIPTION' => 'N',
-            'SEARCHABLE' => 'N',
-            'FILTRABLE' => 'N',
+            'SEARCHABLE' => 'Y',
+            'FILTRABLE' => 'Y',
             'IS_REQUIRED' => 'N',
             'VERSION' => '2',
             'USER_TYPE' => NULL,
@@ -105,6 +108,8 @@ class bx_news extends CModule
     public function doUninstall()
     {
         $this->includeEvents();
+        $this->includeHelpers();
+        $this->includeAgents();
         NewsEvents::unBind();
         HelperManager::getInstance()->Agent()->deleteAgentIfExists($this->MODULE_ID, NewsCheckProcessingStatus::getName());
         ModuleManager::unRegisterModule($this->MODULE_ID);
@@ -116,77 +121,17 @@ class bx_news extends CModule
         require_once dirname(__DIR__) . '/lib/Events/NewsEvents.php';
     }
 
-    protected function saveProperty($iblockId, $fields): int
+    protected function includeHelpers(): void
     {
-        $property = $this->getProperty($iblockId, $fields['CODE']);
-        if ($property) {
-            return (int)$property['ID'];
-        }
-
-        return $this->addProperty($iblockId, $fields);
+        require_once dirname(__DIR__) . '/lib/HelperManager.php';
+        require_once dirname(__DIR__) . '/lib/Helper.php';
+        require_once dirname(__DIR__) . '/lib/Helpers/AgentHelper.php';
+        require_once dirname(__DIR__) . '/lib/Helpers/IblockHelper.php';
     }
 
-    protected function getProperty($iblockId, $code): array
+    protected function includeAgents(): void
     {
-        /** @compatibility filter or code */
-        $filter = is_array($code) ? $code : [
-            'CODE' => $code,
-        ];
-
-        $filter['IBLOCK_ID'] = $iblockId;
-        $filter['CHECK_PERMISSIONS'] = 'N';
-        /* do not use =CODE in filter */
-        $property = CIBlockProperty::GetList(['SORT' => 'ASC'], $filter)->Fetch();
-        return $property;
-    }
-
-    protected function addProperty($iblockId, $fields): int
-    {
-        $default = [
-            'NAME' => '',
-            'ACTIVE' => 'Y',
-            'SORT' => '500',
-            'CODE' => '',
-            'PROPERTY_TYPE' => 'S',
-            'USER_TYPE' => '',
-            'ROW_COUNT' => '1',
-            'COL_COUNT' => '30',
-            'LIST_TYPE' => 'L',
-            'MULTIPLE' => 'N',
-            'IS_REQUIRED' => 'N',
-            'FILTRABLE' => 'Y',
-            'LINK_IBLOCK_ID' => 0,
-        ];
-
-        if (!empty($fields['VALUES'])) {
-            $default['PROPERTY_TYPE'] = 'L';
-        }
-
-        if (!empty($fields['LINK_IBLOCK_ID'])) {
-            $default['PROPERTY_TYPE'] = 'E';
-        }
-
-        $fields = array_replace_recursive($default, $fields);
-
-        if (false !== strpos($fields['PROPERTY_TYPE'], ':')) {
-            list($ptype, $utype) = explode(':', $fields['PROPERTY_TYPE']);
-            $fields['PROPERTY_TYPE'] = $ptype;
-            $fields['USER_TYPE'] = $utype;
-        }
-
-        if (false !== strpos($fields['LINK_IBLOCK_ID'], ':')) {
-            $fields['LINK_IBLOCK_ID'] = $this->getIblockIdByUid($fields['LINK_IBLOCK_ID']);
-        }
-
-        $fields['IBLOCK_ID'] = $iblockId;
-
-        $ib = new CIBlockProperty;
-        $propertyId = $ib->Add($fields);
-
-        if ($propertyId) {
-            return $propertyId;
-        }
-
-        //todo исключение кинуть
+        require_once dirname(__DIR__) . '/lib/Agents/AbstractAgents.php';
+        require_once dirname(__DIR__) . '/lib/Agents/NewsCheckProcessingStatus.php';
     }
 }
