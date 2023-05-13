@@ -1,0 +1,10 @@
+{
+  "name": "bx/news",
+  "type": "project",
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "BX\\News\\": "public/local/modules/bx.news/lib/"
+    }
+  }
+}
