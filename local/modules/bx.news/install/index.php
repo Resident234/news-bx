@@ -1,6 +1,8 @@
 <?php
 
 use Bitrix\Main\ModuleManager;
+use BX\News\Agents\NewsCheckProcessingStatus;
+use BX\News\Events\NewsEvents;
 
 defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
 if (class_exists('bx_news')) {
@@ -52,6 +54,7 @@ class bx_news extends CModule
     {
         $this->includeEvents();
         NewsEvents::bind();
+        CAgent::AddAgent(NewsCheckProcessingStatus::getName(), $this->MODULE_ID, "N", 60);
         ModuleManager::registerModule($this->MODULE_ID);
     }
 
@@ -59,6 +62,7 @@ class bx_news extends CModule
     {
         $this->includeEvents();
         NewsEvents::unBind();
+        CAgent::RemoveAgent(NewsCheckProcessingStatus::getName(), $this->MODULE_ID);
         ModuleManager::unRegisterModule($this->MODULE_ID);
     }
 
