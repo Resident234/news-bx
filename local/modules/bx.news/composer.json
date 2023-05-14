@@ -4,7 +4,10 @@
   "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
-      "BX\\News\\": "public/local/modules/bx.news/lib/"
+      "BX\\News\\": "lib/"
     }
+  },
+  "require": {
+    "rmccue/requests": "^2.0"
   }
 }
