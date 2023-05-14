@@ -8,7 +8,7 @@
 
 [Таблица, в которой хранятся активные на данный момент задачи по обработке](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/perfmon_table.php?lang=ru&table_name=bx_news_processing)
 
-[Агент ```\BX\News\Agents\NewsCheckProcessingStatus::execute()``` крутится раз в минуту](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/agent_edit.php?ID=8951&lang=ru) 
+[Агент ```\BX\News\Agents\NewsCheckProcessingStatus::execute()``` крутится раз в минуту](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/agent_list.php?PAGEN_1=1&SIZEN_1=20&lang=ru&set_filter=Y&adm_filter_applied=0&find=bx.news&find_type=module_id) 
 
 Все завернуто в модуль ```bx.news```, он уже установлен 
                                                   
