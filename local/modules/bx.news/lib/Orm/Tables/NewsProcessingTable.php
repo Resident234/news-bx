@@ -2,9 +2,14 @@
 
 namespace BX\News\Orm\Tables;
 
-use Bitrix\Main\{ArgumentException, ORM\Fields\StringField, SystemException};
+use Bitrix\Main\{ArgumentException,
+    ORM\Data\Result,
+    ORM\Fields\StringField,
+    ORM\Query\Filter\ConditionTree,
+    SystemException};
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields\IntegerField;
+use Exception;
 
 /**
  * Таблица хранит id новостей, для которых в данный момент выполняются задачи
@@ -36,5 +41,19 @@ class NewsProcessingTable extends DataManager
             'NEWS_ID'     => new IntegerField('NEWS_ID', ['required' => true]),
             'REQUEST_ID'  => new StringField('REQUEST_ID', ['required' => true]),
         ];
+    }
+    
+    /**
+     * @param array $fields
+     * @return Result
+     * @throws Exception
+     */
+    public static function save(array $fields): Result
+    {
+        if ($rowExist = static::query()->addSelect('*')->where('NEWS_ID', $fields['NEWS_ID'])->exec()->fetch()) {
+            return static::update($rowExist['ID'], $fields);
+        } else {
+            return static::add($fields);
+        }
     }
 }

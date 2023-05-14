@@ -37,16 +37,16 @@ class NewsEvents extends AbstractEvents
     {
         Loader::includeModule('bx.news');
         if ((int)$fields['IBLOCK_ID'] === (int)HelperManager::getInstance()->Iblock()->getIblockIdIfExists('news', 'news')) {
-            try {
+            //try {
                 $requestId = TasksService::createWork($fields['NAME'], (string)$fields['ID']);
-                $res = NewsProcessingTable::add(['NEWS_ID' => $fields['ID'], 'REQUEST_ID' => $requestId]);
+                $res = NewsProcessingTable::save(['NEWS_ID' => $fields['ID'], 'REQUEST_ID' => $requestId]);
                 if (!$res->isSuccess()) {
                     throw new Exception(join('; ', $res->getErrorMessages()));
                 }
                 CIBlockElement::SetPropertyValuesEx($fields['ID'], $fields['IBLOCK_ID'], ['PROCESSED' => '']);
-            } catch (Exception $e) {
+            //} catch (Exception $e) {
                 //todo логируем
-            }
+            //}
         }
         return true;
     }
