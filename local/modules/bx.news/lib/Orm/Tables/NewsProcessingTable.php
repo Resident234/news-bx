@@ -2,7 +2,7 @@
 
 namespace BX\News\Orm\Tables;
 
-use Bitrix\Main\{ArgumentException, SystemException};
+use Bitrix\Main\{ArgumentException, ORM\Fields\StringField, SystemException};
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields\IntegerField;
 
@@ -34,7 +34,7 @@ class NewsProcessingTable extends DataManager
         return [
             'ID'          => new IntegerField('ID', ['primary' => true, 'autocomplete' => true]),
             'NEWS_ID'     => new IntegerField('NEWS_ID', ['required' => true]),
-            'REQUEST_ID'  => new IntegerField('REQUEST_ID', ['required' => true]),
+            'REQUEST_ID'  => new StringField('REQUEST_ID', ['required' => true]),
         ];
     }
 }

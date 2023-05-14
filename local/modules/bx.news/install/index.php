@@ -1,10 +1,12 @@
 <?php
 
+use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\ModuleManager;
 use BX\News\Agents\NewsCheckProcessingStatus;
 use BX\News\Events\NewsEvents;
 use BX\News\HelperManager;
+use BX\News\Orm\Tables\NewsProcessingTable;
 
 defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
 if (class_exists('bx_news')) {
@@ -57,6 +59,7 @@ class bx_news extends CModule
         $this->includeEvents();
         $this->includeHelpers();
         $this->includeAgents();
+        $this->includeTables();
         NewsEvents::bind();
         HelperManager::getInstance()->Agent()->saveAgent([
             'MODULE_ID'      => $this->MODULE_ID,
@@ -102,6 +105,10 @@ class bx_news extends CModule
                         ),
                 ),
         ));
+        $connection = Application::getConnection();
+        if (!$connection->isTableExists(NewsProcessingTable::getTableName())) {
+            NewsProcessingTable::getEntity()->createDbTable();
+        }
         ModuleManager::registerModule($this->MODULE_ID);
     }
 
@@ -110,8 +117,13 @@ class bx_news extends CModule
         $this->includeEvents();
         $this->includeHelpers();
         $this->includeAgents();
+        $this->includeTables();
         NewsEvents::unBind();
         HelperManager::getInstance()->Agent()->deleteAgentIfExists($this->MODULE_ID, NewsCheckProcessingStatus::getName());
+        $connection = Application::getConnection();
+        if ($connection->isTableExists(NewsProcessingTable::getTableName())) {
+            $connection->dropTable(NewsProcessingTable::getTableName());
+        }
         ModuleManager::unRegisterModule($this->MODULE_ID);
     }
 
@@ -133,5 +145,10 @@ class bx_news extends CModule
     {
         require_once dirname(__DIR__) . '/lib/Agents/AbstractAgents.php';
         require_once dirname(__DIR__) . '/lib/Agents/NewsCheckProcessingStatus.php';
+    }
+
+    protected function includeTables(): void
+    {
+        require_once dirname(__DIR__) . '/lib/Orm/Tables/NewsProcessingTable.php';
     }
 }
