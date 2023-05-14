@@ -56,4 +56,15 @@ class NewsProcessingTable extends DataManager
             return static::add($fields);
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function remove(array $filter): Result
+    {
+        if ($rowExist = static::query()->addSelect('ID')->setFilter($filter)->exec()->fetch()) {
+            return static::delete($rowExist['ID']);
+        }
+        return new Result;
+    }
 }
