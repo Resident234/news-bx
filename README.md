@@ -6,7 +6,7 @@
 Свойство обработанности
 ![img.png](img.png)
 
-[Таблица, в которой хранятся активные на данный момент задачи по обработки](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/perfmon_table.php?lang=ru&table_name=bx_news_processing)
+[Таблица, в которой хранятся активные на данный момент задачи по обработке](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/perfmon_table.php?lang=ru&table_name=bx_news_processing)
 
 [Агент крутится раз в минуту](https://trainee6.xn----gtbdfujo3d.xn--p1ai/bitrix/admin/agent_edit.php?ID=8951&lang=ru) 
 
