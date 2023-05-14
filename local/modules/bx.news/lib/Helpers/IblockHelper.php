@@ -62,7 +62,7 @@ class IblockHelper extends Helper
      * @param array $filter
      * @return array
      */
-    public function getPropertyEnums($filter = [])
+    public function getPropertyEnums($filter = [], $propForKey = null)
     {
         $result = [];
         $dbres = CIBlockPropertyEnum::GetList([
@@ -70,7 +70,11 @@ class IblockHelper extends Helper
             'VALUE' => 'ASC',
         ], $filter);
         while ($item = $dbres->Fetch()) {
-            $result[] = $item;
+            if ($propForKey) {
+                $result[$item[$propForKey]] = $item;
+            } else {
+                $result[] = $item;
+            }
         }
         return $result;
     }
